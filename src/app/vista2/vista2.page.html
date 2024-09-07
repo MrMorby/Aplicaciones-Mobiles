@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <ion-item style="margin-bottom: 20px;">
+            <ion-label position="floating">Nombre de usuario</ion-label>
+            <ion-input formControlName="username" type="text"></ion-input>
+          </ion-item>
+          <ion-note *ngIf="registerForm?.get('username')?.invalid && registerForm?.get('username')?.touched" color="danger">
+            El nombre de usuario es requerido.
+          </ion-note>
+
+          <ion-item style="margin-bottom: 20px;">
+            <ion-label position="floating">Correo electrónico</ion-label>
+            <ion-input formControlName="email" type="email"></ion-input>
+          </ion-item>
+          <ion-note *ngIf="registerForm?.get('email')?.invalid && registerForm?.get('email')?.touched" color="danger">
+            Ingresa un correo válido.
+          </ion-note>
+
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input formControlName="password" type="password"></ion-input>
+          </ion-item>
+          <ion-note *ngIf="registerForm?.get('password')?.invalid && registerForm?.get('password')?.touched" color="danger">
+            La contraseña es requerida.
+          </ion-note>
+
+          <ion-item>
+            <ion-label position="floating">Confirmar contraseña</ion-label>
+            <ion-input formControlName="confirmPassword" type="password"></ion-input>
+          </ion-item>
+          <ion-note *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" color="danger">
+            Las contraseñas deben coincidir.
+          </ion-note>
+
+          <div style="display: flex;" class="ion-boton">
+            <ion-button expand="full" color="primary" type="submit" [disabled]="registerForm.invalid">Confirmar</ion-button>
+            <ion-button routerLink='/home' expand="full">Log in</ion-button>
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
