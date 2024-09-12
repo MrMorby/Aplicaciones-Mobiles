@@ -22,9 +22,11 @@
       La contraseña es requerida.
     </ion-note>
 
-    <div class="button-container">
+    <div class="button-container" style="display: flex;">
       <ion-button expand="full" color="primary" type="submit" [disabled]="loginForm.invalid">Confirmar</ion-button>
       <ion-button routerLink='/vista2' expand="full" color="primary">Registrate</ion-button>
+      <ion-button routerLink='/forgot-password' expand="full" color="primary" style="padding-left: 40px;">¿Olvidaste tu contraseña?</ion-button>
+
     </div>
   </form>
 </ion-content>

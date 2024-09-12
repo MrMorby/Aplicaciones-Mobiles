@@ -22,7 +22,7 @@ export class HomePage {
   onSubmit() {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
-      this.router.navigate(['/main']);
+      this.router.navigate(['/market']);
     }
     else {
       console.log('Formulario inválido');
