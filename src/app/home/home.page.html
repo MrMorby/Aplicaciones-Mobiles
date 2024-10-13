@@ -1,32 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Bienvenido</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding page-home">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-label position="floating">Correo</ion-label>
-      <ion-input formControlName="email" type="email"></ion-input>
-    </ion-item>
-    <ion-note *ngIf="loginForm?.get('email')?.invalid && loginForm?.get('email')?.touched" color="danger">
-      Ingresa un correo válido.
-    </ion-note>
+<ion-content class="ion-padding home-content">
+  <div class="welcome-message">
+    <h1>¡Bienvenido a nuestra aplicación!</h1>
+    <p>Tu viaje comienza aquí.</p>
+  </div>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input formControlName="password" type="password"></ion-input>
-    </ion-item>
-    <ion-note *ngIf="loginForm?.get('password')?.invalid && loginForm?.get('password')?.touched" color="danger">
-      La contraseña es requerida.
-    </ion-note>
-
-    <div class="button-container" style="display: flex;">
-      <ion-button expand="full" color="primary" type="submit" [disabled]="loginForm.invalid">Confirmar</ion-button>
-      <ion-button routerLink='/vista2' expand="full" color="primary">Registrate</ion-button>
-      <ion-button routerLink='/forgot-password' expand="full" color="primary" style="padding-left: 40px;">¿Olvidaste tu contraseña?</ion-button>
-
-    </div>
-  </form>
+  <div class="button-container">
+    <ion-button expand="block" color="primary" [routerLink]="['/login']">
+      Iniciar sesión
+    </ion-button>
+    <ion-button expand="block" color="secondary" [routerLink]="['/register']">
+      Registrarse
+    </ion-button>
+  </div>
 </ion-content>

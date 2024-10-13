@@ -1,74 +1,227 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
-import { Platform } from '@ionic/angular';
+import { CapacitorSQLite, capSQLiteChanges, capSQLiteValues } from '@capacitor-community/sqlite';
+import { Device } from '@capacitor/device';
+import { Preferences } from '@capacitor/preferences';
+import { JsonSQLite } from 'jeep-sqlite/dist/types/interfaces/interfaces';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-  private database!: SQLiteObject;
 
-  constructor(private platform: Platform, private sqlite: SQLite) {
-    this.initDB();
+  // Atributos
+
+  // Observable para comprobar si la base de datos esta lista
+  public dbReady: BehaviorSubject<boolean>;
+  // Indica si estamos en web
+  public isWeb: boolean;
+  // Indica si estamos en IOS
+  public isIOS: boolean;
+  // Nombre de la base de datos
+  public dbName: string;
+
+  constructor(
+    private http: HttpClient
+  ) {
+    this.dbReady = new BehaviorSubject(false);
+    this.isWeb = false;
+    this.isIOS = false;
+    this.dbName = '';
   }
 
-  // Inicializar la base de datos
-  private initDB() {
-    this.platform.ready().then(() => {
-      this.sqlite.create({
-        name: 'usuarios.db',
-        location: 'default'
-      })
-      .then((db: SQLiteObject) => {
-        this.database = db;
-        this.createTables();
-      })
-      .catch(e => console.error('Error al crear la base de datos', e));
-    });
-  }
+  async init() {
 
-  // Crear tabla de usuarios
-  private createTables() {
-    const sql = `
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT,
-        correo TEXT,
-        contrasena TEXT
-      );
-    `;
-    this.database.executeSql(sql, [])
-      .then(() => console.log('Tabla "usuarios" creada'))
-      .catch(e => console.error('Error al crear la tabla', e));
-  }
+    const info = await Device.getInfo();
+    // CapacitorSQLite no tiene disponible el metodo requestPermissions pero si existe y es llamable
+    const sqlite = CapacitorSQLite as any;
 
-  // Crear un nuevo usuario
-  public addUsuario(nombre: string, correo: string, contrasena: string) {
-    const sql = 'INSERT INTO usuarios (nombre, correo, contrasena) VALUES (?, ?, ?)';
-    return this.database.executeSql(sql, [nombre, correo, contrasena]);
-  }
-
-  // Obtener todos los usuarios
-  public getUsuarios() {
-    const sql = 'SELECT * FROM usuarios';
-    return this.database.executeSql(sql, []).then((result) => {
-      let usuarios = [];
-      for (let i = 0; i < result.rows.length; i++) {
-        usuarios.push(result.rows.item(i));
+    // Si estamos en android, pedimos permiso
+    if (info.platform == 'android') {
+      try {
+        await sqlite.requestPermissions();
+      } catch (error) {
+        console.error("Esta app necesita permisos para funcionar")
       }
-      return usuarios;
+      // Si estamos en web, iniciamos la web store
+    } else if (info.platform == 'web') {
+      this.isWeb = true;
+      await sqlite.initWebStore();
+    } else if (info.platform == 'ios') {
+      this.isIOS = true;
+    }
+
+    // Arrancamos la base de datos
+    this.setupDatabase();
+
+  }
+
+  async setupDatabase() {
+
+    // Obtenemos si ya hemos creado la base de datos
+    const dbSetup = await Preferences.get({ key: 'first_setup_key' })
+
+    // Sino la hemos creado, descargamos y creamos la base de datos
+    if (!dbSetup.value) {
+      this.downloadDatabase();
+    } else {
+      // Nos volvemos a conectar
+      this.dbName = await this.getDbName();
+      await CapacitorSQLite.createConnection({ database: this.dbName });
+      await CapacitorSQLite.open({ database: this.dbName })
+      this.dbReady.next(true);
+    }
+
+  }
+
+  downloadDatabase() {
+
+    // Obtenemos el fichero assets/db/db.json
+    this.http.get('assets/db/db.json').subscribe(async (jsonExport: JsonSQLite) => {
+
+
+      const jsonstring = JSON.stringify(jsonExport);
+      // Validamos el objeto
+      const isValid = await CapacitorSQLite.isJsonValid({ jsonstring });
+
+      // Si es valido
+      if (isValid.result) {
+
+        // Obtengo el nombre de la base de datos
+        this.dbName = jsonExport.database;
+        // Lo importo a la base de datos
+        await CapacitorSQLite.importFromJson({ jsonstring });
+        // Creo y abro una conexion a sqlite
+        await CapacitorSQLite.createConnection({ database: this.dbName });
+        await CapacitorSQLite.open({ database: this.dbName })
+
+        // Marco que ya hemos descargado la base de datos
+        await Preferences.set({ key: 'first_setup_key', value: '1' })
+        // Guardo el nombre de la base de datos
+        await Preferences.set({ key: 'dbname', value: this.dbName })
+
+        // Indico que la base de datos esta lista
+        this.dbReady.next(true);
+
+      }
+
+    })
+
+  }
+
+  async getDbName() {
+    if (!this.dbName) {
+      const { value } = await Preferences.get({ key: 'dbname' });
+      if (value) {
+        this.dbName = value;
+      }
+    }
+    return this.dbName;
+  }
+
+
+  // CRUD de usuarios
+  async createUser(name: string, email: string, password: string) {
+    const sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    const dbName = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: dbName,
+      set: [
+        {
+          statement: sql,
+          values: [name, email, password]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) => {
+      if (this.isWeb) {
+        CapacitorSQLite.saveToStore({ database: dbName });
+      }
+      return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async readUsers() {
+    const sql = 'SELECT * FROM users';
+    const dbName = await this.getDbName();
+    return CapacitorSQLite.query({
+      database: dbName,
+      statement: sql,
+      values: [] // necesario para android
+    }).then((response: capSQLiteValues) => {
+      let users = [];
+      if (this.isIOS && response.values.length > 0) {
+        response.values.shift();
+      }
+      response.values.forEach(user => {
+        users.push({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          password: user.password
+        });
+      });
+      return users;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async updateUser(id: number, name: string, email: string, password: string) {
+    const sql = 'UPDATE users SET name=?, email=?, password=? WHERE id=?';
+    const dbName = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: dbName,
+      set: [
+        {
+          statement: sql,
+          values: [name, email, password, id]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) => {
+      if (this.isWeb) {
+        CapacitorSQLite.saveToStore({ database: dbName });
+      }
+      return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async deleteUser(id: number) {
+    const sql = 'DELETE FROM users WHERE id=?';
+    const dbName = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: dbName,
+      set: [
+        {
+          statement: sql,
+          values: [id]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) => {
+      if (this.isWeb) {
+        CapacitorSQLite.saveToStore({ database: dbName });
+      }
+      return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async validateUser(email: string, password: string): Promise<boolean> {
+    const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
+    const dbName = await this.getDbName();
+
+    return CapacitorSQLite.query({
+      database: dbName,
+      statement: sql,
+      values: [email, password]
+    }).then((result: capSQLiteValues) => {
+      // If the result contains a row, the user is valid
+      if (result.values.length > 0) {
+        return true; // Valid user
+      } else {
+        return false; // User not found
+      }
+    }).catch(err => {
+      console.error('Error validating user', err);
+      return false;
     });
   }
 
-  // Actualizar un usuario por ID
-  public updateUsuario(id: number, nombre: string, correo: string, contrasena: string) {
-    const sql = 'UPDATE usuarios SET nombre = ?, correo = ?, contrasena = ? WHERE id = ?';
-    return this.database.executeSql(sql, [nombre, correo, contrasena, id]);
-  }
-
-  // Eliminar un usuario por ID
-  public deleteUsuario(id: number) {
-    const sql = 'DELETE FROM usuarios WHERE id = ?';
-    return this.database.executeSql(sql, [id]);
-  }
 }
