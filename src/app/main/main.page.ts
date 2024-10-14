@@ -28,8 +28,6 @@ export class MainPage {
     }
   ];
 
-  animation: any;
-
   constructor() {}
 
   ngAfterViewInit() {
