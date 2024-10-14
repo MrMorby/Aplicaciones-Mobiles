@@ -1,7 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Marketplace</ion-title>
-    <ion-searchbar placeholder="Buscar en Marketplace..."></ion-searchbar>
+    <ion-title>Market</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -23,9 +22,9 @@
             <ion-card>
               <ion-img [src]="product.image"></ion-img>
               <ion-card-header>
-                <ion-card-title style="display: flex;">{{ product.title }}</ion-card-title>
+                <ion-card-title>{{ product.title }}</ion-card-title>
               </ion-card-header>
-              <ion-card-content style="display: flex;">
+              <ion-card-content>
                 {{ product.price }}
               </ion-card-content>
             </ion-card>
@@ -35,12 +34,9 @@
     </ion-row>
   </ion-grid>
 
-  <div #animationContainer class="animation-container">
-    <ion-card>
-      <ion-card-content>Card</ion-card-content>
-    </ion-card>
-    <ion-button (click)="play()">Play</ion-button>
-    <ion-button (click)="pause()">Pause</ion-button>
-    <ion-button (click)="stop()">Stop</ion-button>
+  <!-- Contenedor del mapa -->
+  <div id="map-container" style="width: 50%; height: auto; padding: 10px;">
+    <div id="map" style="height: 200px; width: 50%;"></div>  <!-- Ajusta la altura aquí -->
   </div>
+
 </ion-content>

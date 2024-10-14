@@ -1,5 +1,6 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { AnimationController } from '@ionic/angular';
+import { Component, AfterViewInit } from '@angular/core';
+
+declare var google: any;
 
 @Component({
   selector: 'app-market',
@@ -7,8 +8,6 @@ import { AnimationController } from '@ionic/angular';
   styleUrls: ['./market.page.scss'],
 })
 export class MarketPage implements AfterViewInit {
-  // Referencia al elemento de animación en el HTML
-  @ViewChild('animationContainer', { static: false }) animationContainer!: ElementRef;
 
   products = [
     {
@@ -28,42 +27,19 @@ export class MarketPage implements AfterViewInit {
     }
   ];
 
-  animation: any;
+  constructor() { }
 
-  constructor(private animationCtrl: AnimationController) {}
-
-  // Este método se llama después de que la vista esté completamente inicializada
   ngAfterViewInit() {
-    if (this.animationContainer) {
-      this.createAnimation();
-    } else {
-      console.error('animationContainer is not available');
-    }
+    this.loadMap();
   }
 
-  // Crea la animación utilizando el AnimationController
-  createAnimation() {
-    this.animation = this.animationCtrl.create()
-      .addElement(this.animationContainer.nativeElement) // Selecciona el elemento de animación
-      .duration(2000)  // Duración de la animación en milisegundos
-      .iterations(Infinity)  // Repite la animación infinitamente
-      .keyframes([
-        { offset: 0, transform: 'scale(1)', opacity: '1' },
-        { offset: 0.5, transform: 'scale(1.5)', opacity: '0.5' },
-        { offset: 1, transform: 'scale(1)', opacity: '1' }
-      ]);
-  }
+  loadMap() {
+    const mapOptions = {
+      center: new google.maps.LatLng(-33.447487, -70.673676),  // Ejemplo: Santiago, Chile
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
-  // Métodos para controlar la animación
-  play() {
-    this.animation.play();
-  }
-
-  pause() {
-    this.animation.pause();
-  }
-
-  stop() {
-    this.animation.stop();
+    const map = new google.maps.Map(document.getElementById('map'), mapOptions);
   }
 }
