@@ -1,24 +1,23 @@
-.page-home {
-  ion-content {
-    background-color: #f0f0f5;
-  }
+.home-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrar verticalmente */
+  align-items: center;     /* Centrar horizontalmente */
+  height: 100%;
+  background: #f7f7f7;
+}
 
-  ion-item {
-    --border-radius: 8px;
-    margin-bottom: 16px;
-  }
+.welcome-message {
+  text-align: center;
+  margin-bottom: 40px; /* Aumentamos el margen para separar más del texto */
+}
 
-  ion-label {
-    color: #000000;
-  }
+.welcome-message h1 {
+  font-size: 2.5em;
+  color: #333;
+}
 
-  ion-input {
-    color: #000000;
-  }
-
-  ion-button {
-    margin-top: 24px;
-    --background: #1d9223;
-    --color: #ff0000;
-  }
+.welcome-message p {
+  font-size: 1.2em;
+  color: #666;
 }

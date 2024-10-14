@@ -12,21 +12,17 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'vista2',
-    loadChildren: () => import('./vista2/vista2.module').then( m => m.Vista2PageModule)
-  },  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
     path: 'main',
     loadChildren: () => import('./main/main.module').then( m => m.MainPageModule)
   },
-  {
-    path: 'market',
-    loadChildren: () => import('./market/market.module').then( m => m.MarketPageModule)
-  },
-  {
-    path: 'forgot-password',
-    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
-  },
-
 ];
 
 @NgModule({
