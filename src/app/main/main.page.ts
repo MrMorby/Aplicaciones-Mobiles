@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { AnimationController } from '@ionic/angular';
+
+import { Component, AfterViewInit } from '@angular/core';
+
+declare var google: any;
 
 @Component({
   selector: 'app-main',
@@ -29,4 +31,18 @@ export class MainPage {
   animation: any;
 
   constructor() {}
+
+  ngAfterViewInit() {
+    this.loadMap();
+  }
+
+  loadMap() {
+    const mapOptions = {
+      center: new google.maps.LatLng(-33.447487, -70.673676),  // Ejemplo: Santiago, Chile
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  }
+
 }
