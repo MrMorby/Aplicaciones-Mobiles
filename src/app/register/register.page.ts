@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatabaseService } from '../services/database.service';
+import { AuthService } from '../services/auth.service'; // Importar AuthService
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,8 @@ export class RegisterPage implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private dbService: DatabaseService // Inyectar el servicio de base de datos
+    private dbService: DatabaseService, // Servicio de base de datos
+    private authService: AuthService // Servicio de autenticación
   ) {}
 
   ngOnInit() {
@@ -40,7 +42,10 @@ export class RegisterPage implements OnInit {
       this.dbService.createUser(username, email, password)
         .then(() => {
           console.log('Usuario registrado exitosamente');
-          this.router.navigate(['/main']); // Redirige al usuario a la página principal
+          // Autenticar al usuario configurando el estado en AuthService
+          this.authService.setAuthenticated(true);
+          // Redirigir a la página principal
+          this.router.navigate(['/main']);
         })
         .catch((e) => console.error('Error registrando usuario', e));
     } else {
