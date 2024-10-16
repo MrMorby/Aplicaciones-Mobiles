@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatabaseService } from '../services/database.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginPage {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private dbService: DatabaseService // Inyectar el servicio de base de datos
+    private dbService: DatabaseService, // Servicio de base de datos
+    private authService: AuthService // Servicio de autenticación
   ) {
     // Inicializa el formulario reactivo con validación
     this.loginForm = this.fb.group({
@@ -34,7 +36,8 @@ export class LoginPage {
         .then((isValid) => {
           if (isValid) {
             console.log('Inicio de sesión exitoso');
-            this.router.navigate(['/main']); // Redirige a la página deseada tras iniciar sesión
+            this.authService.setAuthenticated(true); // Actualizar el estado de autenticación
+            this.router.navigate(['/main']); // Redirige a la página principal
           } else {
             console.log('Correo o contraseña incorrectos');
           }
@@ -44,5 +47,4 @@ export class LoginPage {
       console.log('Formulario inválido');
     }
   }
-
 }
