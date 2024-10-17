@@ -1,0 +1,55 @@
+<ion-menu side="start" menuId="first" contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item>Inicio</ion-item>
+      <ion-item>Categorías</ion-item>
+      <ion-item>Tus pedidos</ion-item>
+      <ion-item>Ventas</ion-item>
+      <ion-item>Mensajes</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<!-- La página principal del contenido -->
+<div style="padding-top: 15px;">
+  <p>  
+    <ion-header [translucent]="true">
+     <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button menu="first"></ion-menu-button>
+        </ion-buttons>
+        <!-- Contenedor para el título y la barra de búsqueda -->
+       <div class="toolbar-content" >
+         <ion-searchbar class="custom-searchbar" placeholder="Buscar en Marketplace..."></ion-searchbar>
+       </div>
+      </ion-toolbar>
+    </ion-header>
+  </p>
+ </div>
+
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button routerLink='/publicate-product'>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+
+<ion-content [fullscreen]="true" id="main-content">
+  <div id="map-container" style="width: 100%; height: auto;">
+    <div id="map" style="height: 200px; width: 100%;"></div>  <!-- Ajusta la altura aquí -->
+  </div>
+  
+</ion-content>
+
