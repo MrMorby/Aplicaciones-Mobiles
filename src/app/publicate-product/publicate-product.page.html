@@ -1,13 +1,38 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>PublicateProduct</ion-title>
+    <ion-title>Publicar Producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">PublicateProduct</ion-title>
+      <ion-title size="large">Publicar Producto</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Formulario para agregar un producto -->
+  <ion-list>
+    <!-- Campo para el nombre del producto -->
+    <ion-item>
+      <ion-label position="stacked">Nombre del Producto</ion-label>
+      <ion-input [(ngModel)]="product.name" placeholder="Nombre del producto"></ion-input>
+    </ion-item>
+
+    <!-- Campo para el precio del producto -->
+    <ion-item>
+      <ion-label position="stacked">Precio</ion-label>
+      <ion-input type="number" [(ngModel)]="product.price" placeholder="Precio del producto"></ion-input>
+    </ion-item>
+
+    <!-- Campo para la descripción del producto -->
+    <ion-item>
+      <ion-label position="stacked">Descripción</ion-label>
+      <ion-textarea [(ngModel)]="product.description" placeholder="Descripción del producto"></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <!-- Botón para enviar el formulario -->
+  <ion-button expand="block" (click)="createProduct()">Subir Producto</ion-button>
+
 </ion-content>
