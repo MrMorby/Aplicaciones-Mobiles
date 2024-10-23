@@ -65,4 +65,12 @@ export class MainPage {
     };
     const map = new google.maps.Map(document.getElementById('map'), mapOptions);
   }
+
+  handleRefresh(event) {
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
+  }
+
+
 }
