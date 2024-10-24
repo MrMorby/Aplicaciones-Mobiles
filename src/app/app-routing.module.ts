@@ -25,6 +25,11 @@ const routes: Routes = [
     loadChildren: () => import('./main/main.module').then( m => m.MainPageModule),
     canActivate: [authGuard]
   },
+  {
+    path: 'publicate-product',
+    loadChildren: () => import('./publicate-product/publicate-product.module').then( m => m.PublicateProductPageModule),
+    canActivate: [authGuard]
+  },
 ];
 
 @NgModule({
