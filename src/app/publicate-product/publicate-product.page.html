@@ -11,28 +11,37 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- Formulario para agregar un producto -->
-  <ion-list>
-    <!-- Campo para el nombre del producto -->
-    <ion-item>
-      <ion-label position="stacked">Nombre del Producto</ion-label>
-      <ion-input [(ngModel)]="product.name" placeholder="Nombre del producto"></ion-input>
-    </ion-item>
+  <form [formGroup]="productoForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+      <!-- campo para el nombre del producto -->
+      <ion-item>
+        <ion-label position="stacked">Nombre del Producto</ion-label>
+        <ion-input formControlName="nombre" placeholder="Nombre del producto"></ion-input>
+      </ion-item>
+      <div *ngIf="formControls['nombre'].invalid && formControls['nombre'].touched" class="error">
+        El nombre es obligatorio y debe tener al menos 3 caracteres.
+      </div>
 
-    <!-- Campo para el precio del producto -->
-    <ion-item>
-      <ion-label position="stacked">Precio</ion-label>
-      <ion-input type="number" [(ngModel)]="product.price" placeholder="Precio del producto"></ion-input>
-    </ion-item>
+      <!-- campo para el precio del producto -->
+      <ion-item>
+        <ion-label position="stacked">Precio</ion-label>
+        <ion-input formControlName="precio" type="number" placeholder="Precio del producto"></ion-input>
+      </ion-item>
+      <div *ngIf="formControls['precio'].invalid && formControls['precio'].touched" class="error">
+        El precio es obligatorio y debe ser mayor a 0.
+      </div>
 
-    <!-- Campo para la descripción del producto -->
-    <ion-item>
-      <ion-label position="stacked">Descripción</ion-label>
-      <ion-textarea [(ngModel)]="product.description" placeholder="Descripción del producto"></ion-textarea>
-    </ion-item>
-  </ion-list>
+      <!-- campo para la descripción del producto -->
+      <ion-item>
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-textarea formControlName="descripcion" placeholder="Descripción del producto"></ion-textarea>
+      </ion-item>
+      <div *ngIf="formControls['descripcion'].invalid && formControls['descripcion'].touched" class="error">
+        La descripción es obligatoria y debe tener al menos 10 caracteres.
+      </div>
+    </ion-list>
 
-  <!-- Botón para enviar el formulario -->
-  <ion-button expand="block" (click)="createProduct()">Subir Producto</ion-button>
-
+    <!-- botón para enviar el formulario -->
+    <ion-button expand="block" type="submit">Subir Producto</ion-button>
+  </form>
 </ion-content>
