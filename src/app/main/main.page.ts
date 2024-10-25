@@ -1,5 +1,6 @@
 
 import { Component, AfterViewInit } from '@angular/core';
+import { DatabaseService } from '../services/database.service';
 import { Geolocation } from '@capacitor/geolocation';  // Importa el plugin de Geolocation
 
 declare var google: any;
@@ -11,27 +12,15 @@ declare var google: any;
 })
 export class MainPage {
 
-  products = [
-    {
-      image: 'assets/images/product1.jpg',
-      title: 'Producto 1',
-      price: '$100.00'
-    },
-    {
-      image: 'assets/images/product2.jpg',
-      title: 'Producto 2',
-      price: '$150.00'
-    },
-    {
-      image: 'assets/images/product3.jpg',
-      title: 'Producto 3',
-      price: '$200.00'
-    }
-  ];
+  products = [];
   latitude: number;
   longitude: number;
 
-  constructor() {}
+  constructor(private dbService: DatabaseService) {}
+
+  async ngOnInit() {
+    this.products = await this.dbService.readProducts();
+  }
 
   ngAfterViewInit() {
     //this.loadMap();

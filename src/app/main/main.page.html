@@ -19,6 +19,20 @@
 
 
 <ion-content class="ion-padding">
+
+  <ion-list>
+    <ion-item *ngFor="let product of products">
+      <ion-thumbnail slot="start">
+        <img [src]="product.image" alt="Imagen del Producto" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ product.name }}</h2>
+        <p>Precio: {{ product.price }}</p>
+        <p>{{ product.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
