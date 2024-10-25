@@ -13,13 +13,16 @@ import { HttpClientModule } from '@angular/common/http'
 import { defineCustomElements as jeepSqlite } from 'jeep-sqlite/loader';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
 
+import { IonicStorageModule } from '@ionic/storage-angular';
+
+
 jeepSqlite(window)
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, provideAnimationsAsync()],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

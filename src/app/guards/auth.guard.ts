@@ -3,21 +3,19 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = async (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const snackBar = inject(MatSnackBar);
 
-  if (authService.checkAuthentication()) {
+  if (await authService.checkAuthentication()) {
     return true;
   } else {
-    // Mostrar un mensaje de error si no está autenticado
     snackBar.open('Acceso denegado. Necesitas iniciar sesión.', 'Cerrar', {
       duration: 3000
     });
-
-    // Opcionalmente, podrías redirigir a una página específica
     router.navigate(['/login']);
     return false;
   }
 };
+

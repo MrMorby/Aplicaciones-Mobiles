@@ -1,0 +1,18 @@
+<ion-menu side="start" menuId="first" contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <ion-item routerLink="/main">Inicio</ion-item>
+      <ion-item routerLink="/categorias">Categorías</ion-item>
+      <ion-item routerLink="/pedidos">Tus pedidos</ion-item>
+      <ion-item routerLink="/ventas">Ventas</ion-item>
+      <ion-item routerLink="/mensajes">Mensajes</ion-item>
+      <ion-item routerLink="" (click)="logout()">Cerrar sesión</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>

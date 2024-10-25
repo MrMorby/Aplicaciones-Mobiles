@@ -1,20 +1,34 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticated = false; // Variable para almacenar el estado de autenticación
+  private isAuthenticated = false;
 
-  constructor() { }
-
-  // Método para verificar si el usuario está autenticado
-  checkAuthentication(): boolean {
-    return this.isAuthenticated;
+  constructor(private storage: Storage) {
+    this.init();
   }
 
-  // Método para actualizar el estado de autenticación
-  setAuthenticated(status: boolean): void {
+  private async init() {
+    await this.storage.create();
+    const storedAuth = await this.storage.get('isAuthenticated');
+    this.isAuthenticated = !!storedAuth;
+  }
+
+  async checkAuthentication(): Promise<boolean> {
+    const storedAuth = await this.storage.get('isAuthenticated');
+    return !!storedAuth;
+  }
+
+  async setAuthenticated(status: boolean): Promise<void> {
     this.isAuthenticated = status;
+    await this.storage.set('isAuthenticated', status);
+  }
+
+  async logout(): Promise<void> {
+    this.isAuthenticated = false;
+    await this.storage.remove('isAuthenticated');
   }
 }

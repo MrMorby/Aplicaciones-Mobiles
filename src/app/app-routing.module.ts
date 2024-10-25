@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { BackButtonComponent } from './components/back-button/back-button.component';
+
 
 const routes: Routes = [
   {
@@ -30,6 +32,10 @@ const routes: Routes = [
     loadChildren: () => import('./publicate-product/publicate-product.module').then( m => m.PublicateProductPageModule),
     canActivate: [authGuard]
   },
+  {
+    path: '**',
+    component: BackButtonComponent
+  }
 ];
 
 @NgModule({

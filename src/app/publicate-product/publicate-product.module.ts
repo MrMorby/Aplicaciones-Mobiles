@@ -7,14 +7,16 @@ import { PublicateProductPageRoutingModule } from './publicate-product-routing.m
 
 import { PublicateProductPage } from './publicate-product.page';
 
+import { BackButtonComponent } from '../components/back-button/back-button.component';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule, // importa ReactiveFormsModule aquí
+    ReactiveFormsModule,
     IonicModule,
     PublicateProductPageRoutingModule
   ],
-  declarations: [PublicateProductPage]
+  declarations: [PublicateProductPage, BackButtonComponent]
 })
 export class PublicateProductPageModule {}
