@@ -23,11 +23,10 @@
     </ion-item>
 
     <!-- Input para Web -->
-    <ion-item *ngIf="isWeb">
-      <ion-label>Imagen del Producto</ion-label>
-      <input type="file" (change)="onFileSelected($event)" accept="image/*" />
-    </ion-item>
-
+      <ion-item *ngIf="isWeb">
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+      </ion-item>
+      <ion-label style="padding-left: 4%;">Imagen del Producto</ion-label>
     <!-- Botón de cámara para Android/iOS -->
     <ion-item *ngIf="!isWeb">
       <ion-label>Imagen del Producto</ion-label>
@@ -36,7 +35,7 @@
 
     <img *ngIf="productImage" [src]="productImage" alt="Imagen del Producto" />
 
-    <ion-button expand="full" type="submit" [disabled]="!productForm.valid || !productImage">Enviar Producto</ion-button>
+    <ion-button expand="full" type="submit" [disabled]="!productForm.valid || !productImage">Publicar Producto</ion-button>
   </form>
 </ion-content>
 

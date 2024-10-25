@@ -1,8 +1,6 @@
 .back-button {
   position: fixed;           // Posiciona el botón de manera fija en la pantalla.
-  top: 16px;                 // Separa el botón de la parte superior de la pantalla.
-  left: 16px;                // Separa el botón del borde izquierdo.
-  z-index: 100;              // Asegúrate de que el botón esté encima de otros elementos.
+  top: -7px;                 // Separa el botón de la parte superior de la pantalla.
   color: var(--ion-color-primary); // Utiliza el color primario de la aplicación.
 
   ion-icon {
