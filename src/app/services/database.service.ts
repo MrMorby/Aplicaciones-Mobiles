@@ -224,4 +224,91 @@ export class DatabaseService {
     });
   }
 
+  async createProduct(name: string, price: number, description: string, image: string) {
+    const sql = 'INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)';
+    const dbName = await this.getDbName();
+
+    return CapacitorSQLite.executeSet({
+      database: dbName,
+      set: [
+        {
+          statement: sql,
+          values: [name, price, description, image]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) => {
+      if (this.isWeb) {
+        CapacitorSQLite.saveToStore({ database: dbName });
+      }
+      return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async readProducts() {
+    const sql = 'SELECT * FROM products';
+    const dbName = await this.getDbName();
+
+    return CapacitorSQLite.query({
+      database: dbName,
+      statement: sql,
+      values: [] // necesario para android
+    }).then((response: capSQLiteValues) => {
+      let products = [];
+      if (this.isIOS && response.values.length > 0) {
+        response.values.shift();
+      }
+      response.values.forEach(product => {
+        products.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          description: product.description,
+          image: product.image
+        });
+      });
+      return products;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async updateProduct(id: number, name: string, price: number, description: string, image: string) {
+    const sql = 'UPDATE products SET name=?, price=?, description=?, image=? WHERE id=?';
+    const dbName = await this.getDbName();
+
+    return CapacitorSQLite.executeSet({
+      database: dbName,
+      set: [
+        {
+          statement: sql,
+          values: [name, price, description, image, id]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) => {
+      if (this.isWeb) {
+        CapacitorSQLite.saveToStore({ database: dbName });
+      }
+      return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async deleteProduct(id: number) {
+    const sql = 'DELETE FROM products WHERE id=?';
+    const dbName = await this.getDbName();
+
+    return CapacitorSQLite.executeSet({
+      database: dbName,
+      set: [
+        {
+          statement: sql,
+          values: [id]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) => {
+      if (this.isWeb) {
+        CapacitorSQLite.saveToStore({ database: dbName });
+      }
+      return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+
 }

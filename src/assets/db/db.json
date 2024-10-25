@@ -24,6 +24,31 @@
           "value": "TEXT NOT NULL"
         }
       ]
+    },
+    {
+      "name": "products",
+      "schema": [
+        {
+          "column": "id",
+          "value": "INTEGER PRIMARY KEY AUTOINCREMENT"
+        },
+        {
+          "column": "name",
+          "value": "TEXT NOT NULL"
+        },
+        {
+          "column": "price",
+          "value": "REAL NOT NULL"
+        },
+        {
+          "column": "description",
+          "value": "TEXT NOT NULL"
+        },
+        {
+          "column": "image",
+          "value": "TEXT"
+        }
+      ]
     }
   ]
 }

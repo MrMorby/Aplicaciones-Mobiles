@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Device } from '@capacitor/device';
+import { DatabaseService } from '../services/database.service';
 
 @Component({
   selector: 'app-publicate-product',
@@ -7,31 +10,62 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./publicate-product.page.scss'],
 })
 export class PublicateProductPage implements OnInit {
-  productoForm: FormGroup;
+  productForm: FormGroup;
+  productImage: string | null = null;
+  isWeb: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {
-    // inicializamos los controles del formulario con validadores
-    this.productoForm = this.formBuilder.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      precio: ['', [Validators.required, Validators.min(1)]],
-      descripcion: ['', [Validators.required, Validators.minLength(10)]],
+  constructor(
+    private fb: FormBuilder,
+    private dbService: DatabaseService
+  ) {
+    this.productForm = this.fb.group({
+      name: ['', [Validators.required]],
+      price: ['', [Validators.required, Validators.min(0.01)]],
+      description: ['', [Validators.required, Validators.maxLength(500)]]
     });
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    const info = await Device.getInfo();
+    this.isWeb = info.platform === 'web';
+  }
 
-  onSubmit() {
-    if (this.productoForm.valid) {
-      // lógica para enviar el producto cuando el formulario es válido
-      console.log('Formulario válido', this.productoForm.value);
-    } else {
-      // muestra un mensaje de error si el formulario es inválido
-      console.log('Formulario inválido');
+  // Método para cargar imagenes en web
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.productImage = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
-  // método para acceder fácilmente a los controles del formulario desde el html
-  get formControls() {
-    return this.productoForm.controls;
+  // Método para cargar imagenes en Android/iOS
+  async uploadImage() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Prompt,
+    });
+    this.productImage = image.dataUrl;
+  }
+
+  async submitProduct() {
+    if (this.productForm.valid && this.productImage) {
+      const { name, price, description } = this.productForm.value;
+
+      try {
+        await this.dbService.createProduct(name, price, description, this.productImage);
+        console.log('Producto creado exitosamente');
+        // Agrega navegación o notificación de éxito
+      } catch (error) {
+        console.error('Error al crear el producto', error);
+      }
+    } else {
+      console.log('Formulario incompleto o falta imagen');
+    }
   }
 }
