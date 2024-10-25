@@ -33,18 +33,23 @@ export class LoginPage {
 
       // Validar usuario en la base de datos
       this.dbService.validateUser(email, password)
-        .then((isValid) => {
-          if (isValid) {
+        .then((result) => {
+          if (result.isValid && result.userId) {
             console.log('Inicio de sesión exitoso');
-            this.authService.setAuthenticated(true); // Actualizar el estado de autenticación
-            this.router.navigate(['/main']); // Redirige a la página principal
+
+            this.authService.setAuthenticated(true, result.userId)
+              .then(() => {
+                this.router.navigate(['/main']);
+              })
+              .catch(error => console.error('Error al guardar el estado de autenticación:', error));
           } else {
             console.log('Correo o contraseña incorrectos');
           }
         })
-        .catch((e) => console.error('Error validando usuario', e));
+        .catch((error) => console.error('Error validando usuario:', error));
     } else {
       console.log('Formulario inválido');
     }
   }
+
 }

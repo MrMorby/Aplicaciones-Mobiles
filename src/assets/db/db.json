@@ -33,6 +33,10 @@
           "value": "INTEGER PRIMARY KEY AUTOINCREMENT"
         },
         {
+          "column": "user_id",
+          "value": "INTEGER"
+        },
+        {
           "column": "name",
           "value": "TEXT NOT NULL"
         },
@@ -47,6 +51,10 @@
         {
           "column": "image",
           "value": "TEXT"
+        },
+        {
+          "foreignkey": "user_id",
+          "value": "REFERENCES users(id) ON DELETE CASCADE"
         }
       ]
     }

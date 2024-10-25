@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <app-back-button></app-back-button>
+    <ion-title>Mis Productos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="userProducts.length > 0; else noProducts">
+    <ion-item *ngFor="let product of userProducts">
+      <ion-thumbnail slot="start">
+        <img [src]="product.image" alt="Imagen del Producto" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ product.name }}</h2>
+        <p>Precio: {{ product.price }}</p>
+        <p>{{ product.description }}</p>
+      </ion-label>
+      <!-- Botón para eliminar el producto -->
+      <ion-button color="danger" (click)="confirmDelete(product.id)">Eliminar</ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noProducts>
+    <ion-text>
+      <p>No tienes productos publicados.</p>
+    </ion-text>
+  </ng-template>
+</ion-content>
+

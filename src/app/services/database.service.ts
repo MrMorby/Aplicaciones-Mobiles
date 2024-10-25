@@ -203,7 +203,7 @@ export class DatabaseService {
     }).catch(err => Promise.reject(err));
   }
 
-  async validateUser(email: string, password: string): Promise<boolean> {
+  async validateUser(email: string, password: string): Promise<{ isValid: boolean; userId?: number }> {
     const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
     const dbName = await this.getDbName();
 
@@ -212,20 +212,23 @@ export class DatabaseService {
       statement: sql,
       values: [email, password]
     }).then((result: capSQLiteValues) => {
-      // If the result contains a row, the user is valid
       if (result.values.length > 0) {
-        return true; // Valid user
+        // Usuario válido, retorna isValid y el userId
+        const userId = result.values[0].id; // Extrae el ID del usuario
+        return { isValid: true, userId };
       } else {
-        return false; // User not found
+        // Usuario no encontrado
+        return { isValid: false };
       }
     }).catch(err => {
       console.error('Error validating user', err);
-      return false;
+      return { isValid: false };
     });
   }
 
-  async createProduct(name: string, price: number, description: string, image: string) {
-    const sql = 'INSERT INTO products (name, price, description, image) VALUES (?, ?, ?, ?)';
+
+  async createProduct(name: string, price: number, description: string, image: string, userId: number) {
+    const sql = 'INSERT INTO products (name, price, description, image, user_id) VALUES (?, ?, ?, ?, ?)';
     const dbName = await this.getDbName();
 
     return CapacitorSQLite.executeSet({
@@ -233,7 +236,7 @@ export class DatabaseService {
       set: [
         {
           statement: sql,
-          values: [name, price, description, image]
+          values: [name, price, description, image, userId]
         }
       ]
     }).then((changes: capSQLiteChanges) => {
@@ -245,13 +248,18 @@ export class DatabaseService {
   }
 
   async readProducts() {
-    const sql = 'SELECT * FROM products';
+    const sql = `
+      SELECT products.id AS productId, products.name AS productName, products.price, products.description,
+             products.image, users.name AS sellerName, users.id AS sellerId
+      FROM products
+      JOIN users ON products.user_id = users.id
+    `;
     const dbName = await this.getDbName();
 
     return CapacitorSQLite.query({
       database: dbName,
       statement: sql,
-      values: [] // necesario para android
+      values: []
     }).then((response: capSQLiteValues) => {
       let products = [];
       if (this.isIOS && response.values.length > 0) {
@@ -259,16 +267,19 @@ export class DatabaseService {
       }
       response.values.forEach(product => {
         products.push({
-          id: product.id,
-          name: product.name,
+          id: product.productId,
+          name: product.productName,
           price: product.price,
           description: product.description,
-          image: product.image
+          image: product.image,
+          sellerName: product.sellerName,
+          sellerId: product.sellerId
         });
       });
       return products;
     }).catch(err => Promise.reject(err));
   }
+
 
   async updateProduct(id: number, name: string, price: number, description: string, image: string) {
     const sql = 'UPDATE products SET name=?, price=?, description=?, image=? WHERE id=?';
@@ -307,6 +318,26 @@ export class DatabaseService {
         CapacitorSQLite.saveToStore({ database: dbName });
       }
       return changes;
+    }).catch(err => Promise.reject(err));
+  }
+
+  async getUserProducts(userId: number) {
+    const sql = 'SELECT * FROM products WHERE user_id = ?';
+    const dbName = await this.getDbName();
+
+    return CapacitorSQLite.query({
+      database: dbName,
+      statement: sql,
+      values: [userId]
+    }).then((response: capSQLiteValues) => {
+      const products = response.values.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        description: product.description,
+        image: product.image
+      }));
+      return products;
     }).catch(err => Promise.reject(err));
   }
 

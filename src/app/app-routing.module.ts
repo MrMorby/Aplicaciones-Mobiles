@@ -33,9 +33,15 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'my-products',
+    loadChildren: () => import('./my-products/my-products.module').then( m => m.MyProductsPageModule),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     component: BackButtonComponent
   }
+
 ];
 
 @NgModule({

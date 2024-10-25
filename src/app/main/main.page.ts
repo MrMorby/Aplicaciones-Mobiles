@@ -1,7 +1,7 @@
 
 import { Component, AfterViewInit } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
-import { Geolocation } from '@capacitor/geolocation';  // Importa el plugin de Geolocation
+import { Geolocation } from '@capacitor/geolocation';
 
 declare var google: any;
 
@@ -27,7 +27,6 @@ export class MainPage {
     this.getUserLocation();
   }
 
-  // Función para obtener la ubicación del usuario
   async getUserLocation() {
     try {
       const coordinates = await Geolocation.getCurrentPosition();

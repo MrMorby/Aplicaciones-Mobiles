@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Device } from '@capacitor/device';
 import { DatabaseService } from '../services/database.service';
+import { AuthService } from '../services/auth.service';
+import { Router, NavigationExtras } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-publicate-product',
@@ -16,7 +19,10 @@ export class PublicateProductPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dbService: DatabaseService
+    private dbService: DatabaseService,
+    private authService: AuthService,
+    private router: Router,
+    private toastController: ToastController
   ) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -58,9 +64,18 @@ export class PublicateProductPage implements OnInit {
       const { name, price, description } = this.productForm.value;
 
       try {
-        await this.dbService.createProduct(name, price, description, this.productImage);
+        const userId = await this.authService.getUserId();
+        if (!userId) throw new Error('Usuario no autenticado');
+
+        await this.dbService.createProduct(name, price, description, this.productImage, userId);
         console.log('Producto creado exitosamente');
-        // Agrega navegación o notificación de éxito
+
+        // Muestra el mensaje de éxito y redirige a la página principal
+        await this.showSuccessToast('¡Publicación exitosa!');
+        this.router.navigate(['/main']).then(() => {
+          // Fuerza una recarga de la página principal
+          window.location.reload();
+        });
       } catch (error) {
         console.error('Error al crear el producto', error);
       }
@@ -68,4 +83,17 @@ export class PublicateProductPage implements OnInit {
       console.log('Formulario incompleto o falta imagen');
     }
   }
+
+
+
+  private async showSuccessToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000, // Duración del mensaje en milisegundos
+      position: 'bottom',
+      color: 'success' // Color del toast
+    });
+    await toast.present();
+  }
+
 }
