@@ -22,11 +22,11 @@
 
   <ion-list>
     <ion-item *ngFor="let product of products">
-      <ion-thumbnail slot="start">
-        <img [src]="product.image" alt="Imagen del Producto" />
-      </ion-thumbnail>
+      <div>
+      <img [src]="product.image" alt="Imagen del Producto" />
+      </div>
       <ion-label>
-        <h2>{{ product.name }}</h2>
+        <h3>{{ product.name }}</h3>
         <p>Precio: {{ product.price }}</p>
         <p>{{ product.description }}</p>
         <p>Publicado por: {{ product.sellerName }}</p>

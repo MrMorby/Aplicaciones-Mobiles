@@ -1,10 +1,10 @@
 .back-button {
   position: fixed;           // Posiciona el botón de manera fija en la pantalla.
-  top: -7px;                 // Separa el botón de la parte superior de la pantalla.
+  top: 7px;                 // Separa el botón de la parte superior de la pantalla.
   color: var(--ion-color-primary); // Utiliza el color primario de la aplicación.
 
   ion-icon {
-    margin-right: 8px;       // Espacio entre la flecha y el texto del botón.
+    margin-right: 8px;  
   }
 
   // Añade un poco de tamaño al icono para mejor visibilidad
