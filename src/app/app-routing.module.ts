@@ -40,7 +40,11 @@ const routes: Routes = [
   {
     path: '**',
     component: BackButtonComponent
+  },  {
+    path: 'comprar',
+    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
   }
+
 
 ];
 

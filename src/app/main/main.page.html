@@ -22,16 +22,25 @@
 
   <ion-list>
     <ion-item *ngFor="let product of products">
-      <div>
-      <img [src]="product.image" alt="Imagen del Producto" />
-      </div>
-      <ion-label>
-        <h3>{{ product.name }}</h3>
-        <p>Precio: {{ product.price }}</p>
-        <p>{{ product.description }}</p>
-        <p>Publicado por: {{ product.sellerName }}</p>
-        <p>ID Producto: {{ product.id }}</p>
-      </ion-label>
+      <ion-card>
+        <img [src]="product.image" alt="Imagen del Producto" />
+        <ion-card-header>
+          <ion-card-title><h3>{{ product.name }}</h3></ion-card-title>
+          <ion-card-subtitle>Precio: {{ product.price }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          {{ product.description }}  <br>
+          Publicado por: {{ product.sellerName }} <br>
+          ID Producto: {{ product.id }}
+        </ion-card-content>
+      </ion-card>
+      <ion-fab horizontal="end">
+        <ion-button routerLink='/Comprar' color="success">
+          Comprar ‎ ‎  
+          <ion-icon  name="pricetag-outline"></ion-icon>
+        </ion-button>
+      </ion-fab>
+      
     </ion-item>
   </ion-list>
 
