@@ -6,35 +6,36 @@
 
 <ion-content>
   <form [formGroup]="productForm" (ngSubmit)="submitProduct()">
-    <ion-item>
-      <ion-label position="floating">Nombre del Producto</ion-label>
-      <ion-input formControlName="name" type="text"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Precio</ion-label>
-      <ion-input formControlName="price" type="number"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea formControlName="description"></ion-textarea>
-    </ion-item>
-
-    <!-- Input para Web -->
-      <ion-item *ngIf="isWeb">
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" />
-      </ion-item>
-      <ion-label style="padding-left: 4%;">Imagen del Producto</ion-label>
-    <!-- Botón de cámara para Android/iOS -->
-    <ion-item *ngIf="!isWeb">
-      <ion-label>Imagen del Producto</ion-label>
-      <ion-button (click)="uploadImage()">Subir Imagen</ion-button>
-    </ion-item>
-
-    <img *ngIf="productImage" [src]="productImage" alt="Imagen del Producto" />
-
-    <ion-button expand="full" type="submit" [disabled]="!productForm.valid || !productImage">Publicar Producto</ion-button>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-item>
+            <ion-label position="floating">Nombre del Producto</ion-label>
+            <ion-input formControlName="name" type="text"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Precio</ion-label>
+            <ion-input formControlName="price" type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Descripción</ion-label>
+            <ion-textarea formControlName="description"></ion-textarea>
+          </ion-item>      
+        </ion-card-subtitle>
+      </ion-card-header>
+          <!-- Input para Web -->
+          <ion-item *ngIf="isWeb">
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+          </ion-item>
+        <!-- Botón de cámara para Android/iOS -->
+        <ion-item *ngIf="!isWeb">
+          <ion-label>Imagen del Producto</ion-label>
+          <ion-button (click)="uploadImage()">Subir Imagen</ion-button>
+        </ion-item>
+    
+        <img *ngIf="productImage" [src]="productImage" alt="Imagen del Producto" style="display: block;"/>
+        <ion-button expand="full" type="submit" [disabled]="!productForm.valid || !productImage">Publicar Producto</ion-button>
+    </ion-card>
   </form>
 </ion-content>
 
