@@ -43,6 +43,10 @@ const routes: Routes = [
   },  {
     path: 'comprar',
     loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
+  },
+  {
+    path: 'bienvenida',
+    loadChildren: () => import('./bienvenida/bienvenida.module').then( m => m.BienvenidaPageModule)
   }
 
 
