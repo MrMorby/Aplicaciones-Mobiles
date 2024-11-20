@@ -38,18 +38,17 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: '**',
-    component: BackButtonComponent
-  },  {
     path: 'comprar',
     loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
   },
   {
-    path: 'bienvenida',
-    loadChildren: () => import('./bienvenida/bienvenida.module').then( m => m.BienvenidaPageModule)
+    path: 'welcome',
+    loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
+  },
+  {
+    path: '**',
+    component: BackButtonComponent
   }
-
-
 ];
 
 @NgModule({

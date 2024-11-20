@@ -1,3 +1,7 @@
+body {
+    background-color: #ffcc00;  /* El color que deseas para el fondo */
+  }
+  
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -35,3 +39,9 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+@media (prefers-color-scheme: dark) {
+    :root.md {
+        --ion-background-color: #19192c;
+    }
+}

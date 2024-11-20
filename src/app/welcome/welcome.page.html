@@ -1,0 +1,14 @@
+<ion-header>
+</ion-header>
+<ion-content>
+  <div class="welcome-container">
+    <!-- Imagen de bienvenida -->
+    <img [src]="currentImage" alt="Bienvenida" class="welcome-image" [@fade]>
+
+    <!-- Texto de bienvenida -->
+    <h2 [@fade]>{{ welcomeMessage }}</h2>
+  </div>
+
+  <!-- Botón "Siguiente" -->
+  <ion-button expand="full" (click)="changeMessage()">Siguiente</ion-button>
+</ion-content>

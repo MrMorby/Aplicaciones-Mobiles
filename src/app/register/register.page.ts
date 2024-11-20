@@ -45,7 +45,7 @@ export class RegisterPage implements OnInit {
           // Autenticar al usuario configurando el estado en AuthService
           this.authService.setAuthenticated(true);
           // Redirigir a la página principal
-          this.router.navigate(['/bienvenida']);
+          this.router.navigate(['/welcome']);
         })
         .catch((e) => console.error('Error registrando usuario', e));
     } else {
