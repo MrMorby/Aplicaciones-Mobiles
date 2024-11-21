@@ -122,24 +122,54 @@ export class DatabaseService {
 
 
   // CRUD de usuarios
-  async createUser(name: string, email: string, password: string) {
-    const sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+  async createUser(name: string, email: string, password: string): Promise<number> {
+    const insertSql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    const lastIdSql = 'SELECT id FROM users ORDER BY id DESC LIMIT 1';
     const dbName = await this.getDbName();
-    return CapacitorSQLite.executeSet({
-      database: dbName,
-      set: [
-        {
-          statement: sql,
-          values: [name, email, password]
+
+    try {
+        // Inserta el usuario
+        const insertResult = await CapacitorSQLite.executeSet({
+            database: dbName,
+            set: [
+                {
+                    statement: insertSql,
+                    values: [name, email, password],
+                },
+            ],
+        });
+
+        if (this.isWeb) {
+            await CapacitorSQLite.saveToStore({ database: dbName });
         }
-      ]
-    }).then((changes: capSQLiteChanges) => {
-      if (this.isWeb) {
-        CapacitorSQLite.saveToStore({ database: dbName });
-      }
-      return changes;
-    }).catch(err => Promise.reject(err));
-  }
+
+        // Verifica si hubo cambios en la inserción
+        if (insertResult.changes && insertResult.changes.changes > 0) {
+            console.log('Registro insertado correctamente:', insertResult.changes);
+
+            // Obtén el ID del último registro insertado
+            const lastIdResult = await CapacitorSQLite.query({
+                database: dbName,
+                statement: lastIdSql,
+            });
+
+            console.log('Resultado de last_insert_rowid:', lastIdResult.values);
+
+            if (lastIdResult.values && lastIdResult.values.length > 0) {
+                return lastIdResult.values[0].id; // Devuelve el ID
+            } else {
+                throw new Error('No se pudo obtener el último ID insertado.');
+            }
+        } else {
+            throw new Error('No se realizaron cambios en la base de datos.');
+        }
+    } catch (error) {
+        console.error('Error en createUser:', error);
+        throw error;
+    }
+}
+
+
 
   async readUsers() {
     const sql = 'SELECT * FROM users';

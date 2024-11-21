@@ -35,21 +35,24 @@ export class RegisterPage implements OnInit {
 
   // Maneja el envío del formulario
   onSubmit() {
-    if (this.registerForm.valid) {
-      const { username, email, password } = this.registerForm.value;
+      if (this.registerForm.valid) {
+          const { username, email, password } = this.registerForm.value;
 
-      // Llamada al método de la base de datos para agregar el usuario
-      this.dbService.createUser(username, email, password)
-        .then(() => {
-          console.log('Usuario registrado exitosamente');
-          // Autenticar al usuario configurando el estado en AuthService
-          this.authService.setAuthenticated(true);
-          // Redirigir a la página principal
-          this.router.navigate(['/welcome']);
-        })
-        .catch((e) => console.error('Error registrando usuario', e));
-    } else {
-      console.log('Formulario inválido');
-    }
+          // Llamada al método de la base de datos para agregar el usuario
+          this.dbService.createUser(username, email, password)
+              .then((lastUserId: number) => {
+                  console.log('Usuario registrado exitosamente con ID:', lastUserId);
+
+                  // Autenticar al usuario configurando el estado en AuthService
+                  this.authService.setAuthenticated(true, lastUserId);
+
+                  // Redirigir a la página principal
+                  this.router.navigate(['/welcome']);
+              })
+              .catch((e) => console.error('Error registrando usuario', e));
+      } else {
+          console.log('Formulario inválido');
+      }
   }
+
 }

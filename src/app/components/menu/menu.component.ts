@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -6,9 +8,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
-  constructor() {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  logout() {
-    console.log('Cerrando sesión...');
+  async logout(): Promise<void> {
+      try {
+          // Configura el estado de autenticación como no autenticado
+          await this.authService.setAuthenticated(false);
+
+          console.log('Sesión cerrada exitosamente');
+
+          // Redirigir al usuario a la página principal
+          this.router.navigate(['/home']);
+      } catch (error) {
+          console.error('Error al cerrar sesión:', error);
+      }
   }
 }

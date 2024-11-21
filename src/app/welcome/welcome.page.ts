@@ -31,10 +31,10 @@ export class WelcomePage {
 
     // Arreglo de imágenes que cambiarán junto con los mensajes
   images: string[] = [
-    "assets/imgs/pato.png",
-    "assets/imgs/welcome-image2.png",
-    "assets/imgs/welcome-image3.png",
-    "assets/imgs/welcome-image4.png"
+    "assets/imgs/buy_now.png",
+    "assets/imgs/buy_now.png",
+    "assets/imgs/buy_now.png",
+    "assets/imgs/buy_now.png"
   ];
   currentMessageIndex: number = 0;  // Índice para cambiar el mensaje
   welcomeMessage: string = this.welcomeMessages[this.currentMessageIndex];  // Mensaje actual
