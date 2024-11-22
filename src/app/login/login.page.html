@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-back-button></app-back-button>
     <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -24,7 +25,6 @@
 
     <div class="button-container" style="display: flex; flex-direction: column; align-items: stretch; gap: 10px;">
       <ion-button expand="block" color="primary" type="submit" [disabled]="loginForm.invalid">Confirmar</ion-button>
-      <ion-button routerLink='/register' expand="block" color="secondary">Regístrate</ion-button>
       <ion-button routerLink='/forgot-password' expand="block" color="tertiary">¿Olvidaste tu contraseña?</ion-button>
     </div>
   </form>

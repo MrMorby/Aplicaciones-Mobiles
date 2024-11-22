@@ -1,27 +1,45 @@
 .welcome-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 100%;
-  }
-  
-  .welcome-image {
-    width: 80%;
-    max-width: 300px;
-    margin-bottom: 20px;
-  }
-  
-  h2 {
-    font-size: 24px;
-    color: #532c2c;
-    margin-bottom: 20px;
-  }
-  
-  ion-button {
-    --background: #1e0dd8; /* Color del botón */
-    --color: white;
-    font-size: 18px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.welcome-image {
+  width: 80%;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  color: #532c2c;
+  margin-bottom: 20px;
+}
+
+ion-button {
+  --background: #1e0dd8; /* Color del botón */
+  --color: white;
+  font-size: 18px;
+}
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white; /* Puedes cambiar el color aquí */
+  z-index: 9999; /* Asegúrate de que cubra todo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-screen::after {
+  content: 'Cargando...'; /* Texto opcional */
+  font-size: 20px;
+  color: gray;
+}

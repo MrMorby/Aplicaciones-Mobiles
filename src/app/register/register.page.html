@@ -1,5 +1,6 @@
 <ion-header>
   <ion-toolbar>
+    <app-back-button></app-back-button>
     <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -41,9 +42,8 @@
             Las contraseñas deben coincidir.
           </ion-note>
 
-          <div style="display: flex; margin-top: 20px;" class="ion-boton">
-            <ion-button expand="full" color="primary" type="submit" [disabled]="registerForm.invalid">Confirmar</ion-button>
-            <ion-button routerLink='/home' expand="full">Log in</ion-button>
+          <div class="button-container" style="display: flex; flex-direction: column; align-items: stretch; gap: 10px;">
+            <ion-button expand="block" color="primary" type="submit" [disabled]="registerForm.invalid">Confirmar</ion-button>
           </div>
         </form>
       </ion-col>

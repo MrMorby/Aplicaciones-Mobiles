@@ -19,34 +19,36 @@ import { trigger, transition, animate, style } from '@angular/animations';
   ]
 })
 export class WelcomePage {
-
   welcomeMessages: string[] = [
     "¡Bienvenido a Donut!",
     '¡Aqui podras comprar desde <br> donde quieras!',
     "¡Y vender desde donde quieras!",
-    "¡Explora todas las funcionalidades!" 
+    "¡Explora todas las funcionalidades!"
   ];
   images: string[] = [
     "assets/imgs/buy_now.png",
     "assets/imgs/compras.png",
     "assets/imgs/vender.png",
-    "assets/imgs/buy_now.png" 
+    "assets/imgs/buy_now.png"
   ];
-  currentMessageIndex: number = 0;  
-  welcomeMessage: string = this.welcomeMessages[this.currentMessageIndex];  
-  currentImage: string = this.images[this.currentMessageIndex]; 
+  currentMessageIndex: number = 0;
+  welcomeMessage: string = this.welcomeMessages[this.currentMessageIndex];
+  currentImage: string = this.images[this.currentMessageIndex];
+  isLoading: boolean = false; // Estado de carga
 
   constructor(private router: Router) {}
+
   changeMessage() {
-    this.currentMessageIndex = (this.currentMessageIndex + 1);
-    this.welcomeMessage = this.welcomeMessages[this.currentMessageIndex];
-    this.currentImage = this.images[this.currentMessageIndex];
+    this.currentMessageIndex += 1;
 
     if (this.currentMessageIndex === this.welcomeMessages.length) {
-        this.router.navigate(['/main']); 
+      this.isLoading = true; // Mostrar la pantalla de bloqueo
+      this.router.navigate(['/main']).then(() => {
+        window.location.reload();
+      });
+    } else {
+      this.welcomeMessage = this.welcomeMessages[this.currentMessageIndex];
+      this.currentImage = this.images[this.currentMessageIndex];
     }
-    console.log(this.currentMessageIndex)
-    console.log(this.currentMessageIndex)
-
   }
 }
