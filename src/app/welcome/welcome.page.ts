@@ -23,36 +23,36 @@ export class WelcomePage {
 
   // Mensajes de bienvenida que cambiarán al hacer click
   welcomeMessages: string[] = [
-    "¡Bienvenido a nuestro sistema!",
-    "¡Estamos felices de verte!",
-    "¡Explora todas las funcionalidades!",
-    "¡Tu experiencia comienza ahora!"
+    "¡Bienvenido a Donut!",
+    '¡Aqui podras comprar desde <br> donde quieras!',
+    "¡Y vender desde donde quieras!",
+    "¡Explora todas las funcionalidades!" 
   ];
-
     // Arreglo de imágenes que cambiarán junto con los mensajes
   images: string[] = [
     "assets/imgs/buy_now.png",
-    "assets/imgs/buy_now.png",
-    "assets/imgs/buy_now.png",
-    "assets/imgs/buy_now.png"
+    "assets/imgs/compras.png",
+    "assets/imgs/vender.png",
+    "assets/imgs/buy_now.png" 
   ];
   currentMessageIndex: number = 0;  // Índice para cambiar el mensaje
   welcomeMessage: string = this.welcomeMessages[this.currentMessageIndex];  // Mensaje actual
   currentImage: string = this.images[this.currentMessageIndex];  // Imagen actual
 
   constructor(private router: Router) {}
-
   // Función que cambia el mensaje y la imagen cuando se presiona el botón
   changeMessage() {
     // Incrementar el índice para obtener el siguiente mensaje
-    this.currentMessageIndex = (this.currentMessageIndex + 1) % this.welcomeMessages.length;
+    this.currentMessageIndex = (this.currentMessageIndex + 1);
     this.welcomeMessage = this.welcomeMessages[this.currentMessageIndex];
+    this.currentImage = this.images[this.currentMessageIndex];
 
     // Cuando lleguemos al último mensaje, redirigimos a la página 'main'
-    if (this.currentMessageIndex === this.welcomeMessages.length - 1) {
-      setTimeout(() => {
+    if (this.currentMessageIndex === this.welcomeMessages.length) {
         this.router.navigate(['/main']); // Navega a la página 'main'
-      }, 1000);  // Puedes darle un pequeño retraso antes de redirigir (1 segundo)
     }
+    console.log(this.currentMessageIndex)
+    console.log(this.currentMessageIndex)
+
   }
 }

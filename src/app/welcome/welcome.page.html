@@ -6,9 +6,9 @@
     <img [src]="currentImage" alt="Bienvenida" class="welcome-image" [@fade]>
 
     <!-- Texto de bienvenida -->
-    <h2 [@fade]>{{ welcomeMessage }}</h2>
+    <h2 [@fade] [innerHTML] ="welcomeMessage" > </h2>
+  <ion-button expand="full" (click)="changeMessage()">Siguiente</ion-button>
   </div>
 
   <!-- Botón "Siguiente" -->
-  <ion-button expand="full" (click)="changeMessage()">Siguiente</ion-button>
 </ion-content>
