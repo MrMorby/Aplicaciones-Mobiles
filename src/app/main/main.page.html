@@ -1,62 +1,71 @@
-<app-menu ></app-menu>
+<app-menu></app-menu>
 
-<!-- La página principal del contenido -->
-<div>
-  <p>
-    <ion-header [translucent]="true">
-     <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-menu-button menu="first" style="padding-top: 4%;"></ion-menu-button>
-        </ion-buttons>
-         <ion-searchbar class="custom-searchbar" placeholder="Buscar en Marketplace..." style="padding-top: 3% ;"></ion-searchbar>
-      </ion-toolbar>
-    </ion-header>
-  </p>
- </div>
+<!-- Header con menú y barra de búsqueda -->
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="first" style="padding-top: 4%;"></ion-menu-button>
+    </ion-buttons>
+    <!-- Buscar productos con el evento ionInput -->
+    <ion-searchbar
+      class="custom-searchbar"
+      placeholder="Buscar en Marketplace..."
+      style="padding-top: 3%;"
+      (ionInput)="filterProducts($event)">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
 
+<!-- Contenido Principal -->
+<ion-content class="ion-padding" id="main-content">
 
-<ion-content class="ion-padding">
+  <!-- Spinner de carga mientras se obtienen los productos -->
+  <ion-spinner *ngIf="loading" class="spinner-center"></ion-spinner>
 
-  <ion-list>
-    <ion-item *ngFor="let product of products">
+  <!-- Lista de productos filtrados -->
+  <ion-list *ngIf="!loading">
+    <ion-item *ngFor="let product of filteredProducts">
       <ion-card>
-        <img [src]="product.image" alt="Imagen del Producto" />
+        <img [src]="product.image || 'assets/placeholder.jpg'" alt="Imagen del Producto" />
         <ion-card-header>
-          <ion-card-title><h3>{{ product.name }}</h3>
-          <hr color="gray"></ion-card-title>
-          <ion-card-subtitle style="color: rgb(47, 64, 218);">Precio: {{ product.price }}</ion-card-subtitle>
+          <ion-card-title>
+            <h3>{{ product.name }}</h3>
+            <hr color="gray">
+          </ion-card-title>
+          <ion-card-subtitle style="color: rgb(47, 64, 218);">
+            Precio: {{ product.price }}
+          </ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          {{ product.description }}  <br> <br>
-          Publicado por: {{ product.sellerName }} <br>
+          {{ product.description }}<br><br>
+          Publicado por: {{ product.sellerName }}<br>
           ID Producto: {{ product.id }}
         </ion-card-content>
       </ion-card>
       <ion-fab horizontal="end">
-        <ion-button routerLink='/Comprar' color="success">
-          Comprar ‎   
-          <ion-icon  name="pricetag-outline"></ion-icon>
+        <ion-button routerLink="/Comprar" color="success">
+          Comprar ‎
+          <ion-icon name="pricetag-outline"></ion-icon>
         </ion-button>
       </ion-fab>
-      
     </ion-item>
   </ion-list>
 
+  <!-- Refresher para recargar productos -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button routerLink='/publicate-product'>
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
+  <!-- Botón flotante para publicar productos -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/publicate-product">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
-
-<ion-content [fullscreen]="true" id="main-content">
-  <div id="map-container" style="width: 100%; height: auto;">
-    <div id="map" style="height: 200px; width: 100%;"></div>  <!-- Ajusta la altura aquí -->
+  <!-- Contenedor del mapa -->
+  <div id="map-container" style="width: 100%; height: auto; margin-top: 20px;">
+    <div id="map" style="height: 200px; width: 100%;"></div>
   </div>
 
 </ion-content>
-
