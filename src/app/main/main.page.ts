@@ -21,6 +21,9 @@ export class MainPage {
 
   async ngOnInit() {
     this.loading = true; // Inicia el spinner
+  }
+
+  async ionViewWillEnter() {
     try {
       this.products = await this.dbService.readProducts();
       this.filteredProducts = this.products;

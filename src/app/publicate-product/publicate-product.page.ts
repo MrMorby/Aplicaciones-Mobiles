@@ -70,12 +70,9 @@ export class PublicateProductPage implements OnInit {
         await this.dbService.createProduct(name, price, description, this.productImage, userId);
         console.log('Producto creado exitosamente');
 
-        // Muestra el mensaje de éxito y redirige a la página principal
+        // Muestra el mensaje de éxito y navega a la página principal
         await this.showSuccessToast('¡Publicación exitosa!');
-        this.router.navigate(['/main']).then(() => {
-          // Fuerza una recarga de la página principal
-          window.location.reload();
-        });
+        this.router.navigate(['/main']);
       } catch (error) {
         console.error('Error al crear el producto', error);
       }

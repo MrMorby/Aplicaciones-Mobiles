@@ -47,6 +47,7 @@ export class MyProductsPage implements OnInit {
           text: 'Eliminar',
           handler: () => {
             this.dbService.deleteProduct(productId); // Eliminar el producto si el usuario confirma
+            this.ngOnInit();
           }
         }
       ]
