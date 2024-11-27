@@ -134,7 +134,7 @@ export class DatabaseService {
             set: [
                 {
                     statement: insertSql,
-                    values: [name, email, password],
+                    values: [name, email, password], // Parámetros para la inserción
                 },
             ],
         });
@@ -151,6 +151,7 @@ export class DatabaseService {
             const lastIdResult = await CapacitorSQLite.query({
                 database: dbName,
                 statement: lastIdSql,
+                values: [], // Arreglo vacío ya que no hay parámetros en la consulta
             });
 
             console.log('Resultado de last_insert_rowid:', lastIdResult.values);
@@ -168,8 +169,6 @@ export class DatabaseService {
         throw error;
     }
 }
-
-
 
   async readUsers() {
     const sql = 'SELECT * FROM users';

@@ -45,6 +45,7 @@ export class RegisterPage implements OnInit {
 
                   // Autenticar al usuario configurando el estado en AuthService
                   this.authService.setAuthenticated(true, lastUserId);
+                  console.log('Autenticado');
 
                   // Redirigir a la página principal
                   this.router.navigate(['/welcome']);

@@ -1,11 +1,8 @@
 <ion-header>
 </ion-header>
 <ion-content>
-  <!-- Pantalla de carga -->
-  <div class="loading-screen" *ngIf="isLoading"></div>
-
   <!-- Contenido principal -->
-  <div class="welcome-container" *ngIf="!isLoading">
+  <div class="welcome-container">
     <!-- Imagen de bienvenida -->
     <img [src]="currentImage" alt="Bienvenida" class="welcome-image" [@fade]>
 

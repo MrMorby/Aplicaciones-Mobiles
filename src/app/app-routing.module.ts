@@ -38,12 +38,14 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'comprar',
-    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule)
+    path: 'welcome',
+    loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule),
+    canActivate: [authGuard]
   },
   {
-    path: 'welcome',
-    loadChildren: () => import('./welcome/welcome.module').then( m => m.WelcomePageModule)
+    path: 'comprar',
+    loadChildren: () => import('./comprar/comprar.module').then( m => m.ComprarPageModule),
+    canActivate: [authGuard]
   },
   {
     path: '**',
